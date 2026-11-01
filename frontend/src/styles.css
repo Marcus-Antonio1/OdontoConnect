@@ -1,0 +1,56 @@
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #183247;
+  background: #f4f7fa;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+.page { min-height: 100vh; }
+.topbar {
+  height: 76px; display: flex; align-items: center; gap: 12px;
+  padding: 0 max(6vw, 24px); background: #123047; color: white;
+}
+.brand-mark {
+  width: 38px; height: 38px; display: grid; place-items: center;
+  border-radius: 12px; background: #e7f2f4; color: #176b78;
+  font-size: 22px; font-weight: 800;
+}
+.topbar strong, .topbar span { display: block; }
+.topbar strong { font-size: 15px; }
+.topbar div:nth-child(2) span { margin-top: 3px; color: #b8cbd6; font-size: 12px; }
+.demo-tag {
+  margin-left: auto; border: 1px solid #5b8294; border-radius: 20px;
+  padding: 7px 11px; color: #d9edf2; font-size: 10px; letter-spacing: .08em;
+}
+.hero { max-width: 980px; margin: 76px auto 54px; padding: 0 24px; }
+.eyebrow { color: #287d83; font-size: 11px; font-weight: 800; letter-spacing: .13em; }
+h1 { max-width: 720px; margin: 18px 0; color: #123047; font-size: clamp(36px, 6vw, 58px); line-height: 1.06; letter-spacing: -.045em; }
+.hero > p { max-width: 650px; color: #647887; font-size: 16px; line-height: 1.7; }
+.status-card {
+  max-width: 570px; margin-top: 34px; padding: 18px 20px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  border: 1px solid #dce6eb; border-radius: 14px; background: white;
+}
+.status-card strong, .status-card div span { display: block; }
+.status-card div span { margin-top: 5px; color: #718391; font-size: 12px; }
+.status-indicator { border-radius: 20px; padding: 7px 10px; font-size: 10px; font-weight: 800; }
+.online { color: #16794e; background: #e6f6ee; }
+.offline { color: #a65b24; background: #fff1e4; }
+.modules {
+  max-width: 980px; margin: 0 auto; padding: 0 24px;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+}
+.modules article { padding: 22px; border: 1px solid #e0e8ed; border-radius: 14px; background: white; }
+.modules article > span { color: #27858a; font-size: 12px; font-weight: 800; }
+.modules h2 { margin: 16px 0 8px; font-size: 17px; }
+.modules p { margin: 0; color: #718391; font-size: 13px; line-height: 1.6; }
+footer { max-width: 980px; margin: 54px auto 0; padding: 0 24px 28px; color: #8a9aa5; font-size: 11px; }
+@media (max-width: 650px) {
+  .hero { margin-top: 52px; }
+  .modules { grid-template-columns: 1fr; }
+  .status-card { align-items: flex-start; }
+}

@@ -1,0 +1,27 @@
+spring:
+  config:
+    import: optional:file:../.env[.properties]
+
+  application:
+    name: odontoconnect-api
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:odontoconnect}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+
+  # Nesta etapa, a conexão JDBC valida a disponibilidade do PostgreSQL.
+  # JPA e Flyway serão adicionados quando iniciarmos a modelagem persistente.
+
+server:
+  port: ${SERVER_PORT:8080}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: never
