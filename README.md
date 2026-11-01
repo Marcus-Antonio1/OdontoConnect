@@ -114,6 +114,4 @@ docker compose down -v
 6. Chat web e atualizações em tempo real.
 7. Integrações externas, testes e preparação para piloto.
 
-## Observações de segurança
-
-Este protótipo não deve receber dados reais de pacientes. Não exponha o PostgreSQL ou a API publicamente. Antes de qualquer piloto real, será necessário definir responsabilidades institucionais, bases legais, controles de acesso, auditoria, retenção, backups e requisitos de segurança.
+## 
