@@ -11,6 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.odontoconnect.common.exception.UserAlreadyExistsException;
+
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -37,7 +39,7 @@ public class UserService {
         String email = request.email().trim();
 
         if (userRepository.existsByEmailIgnoreCase(email)) {
-            throw new IllegalArgumentException(
+            throw new UserAlreadyExistsException(
                     "Já existe um usuário cadastrado com esse e-mail."
             );
         }

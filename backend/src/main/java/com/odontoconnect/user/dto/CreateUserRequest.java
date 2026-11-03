@@ -28,7 +28,7 @@ public record CreateUserRequest(
         String registrationNumber,
 
         @NotEmpty(message = "Informe pelo menos um perfil")
-        Set<String> roles
+        Set<@NotBlank(message = "O nome do perfil não pode ser vazio") String> roles
 
 ) {
 }

@@ -1,0 +1,72 @@
+
+package com.odontoconnect.user.controller;
+
+import com.odontoconnect.user.dto.CreateUserRequest;
+import com.odontoconnect.user.dto.UserResponse;
+import com.odontoconnect.user.entity.User;
+import com.odontoconnect.user.service.UserService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+import jakarta.validation.Valid;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.stream.Collectors;
+
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
+@RestController
+@RequestMapping("/api/users")
+@Tag(name = "Usuários", description = "Gerenciamento de usuários")
+public class UserController {
+
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @PostMapping
+    @Operation(
+            summary = "Cadastrar usuário",
+            description = "Cria um novo usuário e associa seus perfis."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Usuário cadastrado com sucesso"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Dados inválidos ou perfil inexistente"
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "Já existe um usuário com esse e-mail"
+            )
+    })
+    public ResponseEntity<UserResponse> createUser(
+            @Valid @RequestBody CreateUserRequest request) {
+
+        User user = userService.createUser(request);
+
+        UserResponse response = new UserResponse(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getRegistrationNumber(),
+                user.isActive(),
+                user.getRoles().stream()
+                        .map(role -> role.getName())
+                        .collect(Collectors.toSet()),
+                user.getCreatedAt()
+        );
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+}
