@@ -18,7 +18,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Collectors;
-
+import java.util.List;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
@@ -54,6 +54,8 @@ public class UserController {
             )
     })
 
+
+
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponse> createUser(
             @Valid @RequestBody CreateUserRequest request) {
@@ -73,5 +75,38 @@ public class UserController {
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @GetMapping
+    @Operation(
+            summary = "Listar usuários",
+            description = "Retorna todos os usuários cadastrados."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Usuários listados com sucesso"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Usuário sem permissão"
+            )
+    })
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<UserResponse>> findAllUsers() {
+
+        return ResponseEntity.ok(userService.findAllUsers());
+    }
+
+    @GetMapping("/{id}")
+    @Operation(
+            summary = "Buscar usuário por ID",
+            description = "Retorna os dados de um usuário específico."
+    )
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserResponse> findUserById(
+            @PathVariable Long id) {
+
+        return ResponseEntity.ok(userService.findUserById(id));
     }
 }

@@ -12,7 +12,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.http.HttpStatus;
 
 import java.time.OffsetDateTime;
-
+import com.odontoconnect.common.exception.UserNotFoundException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -22,6 +22,16 @@ public class GlobalExceptionHandler {
 
         return buildResponse(
                 HttpStatus.CONFLICT,
+                exception.getMessage()
+        );
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ApiError> handleUserNotFound(
+            UserNotFoundException exception) {
+
+        return buildResponse(
+                HttpStatus.NOT_FOUND,
                 exception.getMessage()
         );
     }
