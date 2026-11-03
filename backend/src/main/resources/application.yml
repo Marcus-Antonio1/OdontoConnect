@@ -42,3 +42,10 @@ jwt:
   expiration: ${JWT_EXPIRATION:86400000}
 
 
+app:
+  bootstrap:
+    admin:
+      enabled: ${BOOTSTRAP_ADMIN_ENABLED:false}
+      name: ${BOOTSTRAP_ADMIN_NAME:}
+      email: ${BOOTSTRAP_ADMIN_EMAIL:}
+      password: ${BOOTSTRAP_ADMIN_PASSWORD:}
