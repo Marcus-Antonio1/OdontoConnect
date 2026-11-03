@@ -1,7 +1,6 @@
-
 spring:
   config:
-    import: optional:file:../.env[.properties]
+    import: optional:file:./odontoconnect/.env[.properties]
 
   application:
     name: odontoconnect-api
@@ -38,6 +37,8 @@ management:
   # Nesta etapa, a conexão JDBC valida a disponibilidade do PostgreSQL.
   # JPA e Flyway serão adicionados quando iniciarmos a modelagem persistente.
 
-
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION:86400000}
 
 

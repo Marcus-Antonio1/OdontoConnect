@@ -4,6 +4,7 @@ package com.odontoconnect.user.service;
 import com.odontoconnect.user.entity.User;
 import com.odontoconnect.user.repository.UserRepository;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,6 +20,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String email)
             throws UsernameNotFoundException {
 
