@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.odontoconnect.common.exception.UserAlreadyExistsException;
 
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.http.HttpStatus;
+
 import java.time.OffsetDateTime;
 
 @RestControllerAdvice
@@ -44,6 +47,16 @@ public class GlobalExceptionHandler {
         return buildResponse(
                 HttpStatus.BAD_REQUEST,
                 exception.getMessage()
+        );
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiError> handleAuthenticationException(
+            AuthenticationException exception) {
+
+        return buildResponse(
+                HttpStatus.UNAUTHORIZED,
+                "E-mail ou senha inválidos."
         );
     }
 
