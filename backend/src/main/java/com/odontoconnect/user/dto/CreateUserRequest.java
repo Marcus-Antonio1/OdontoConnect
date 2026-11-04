@@ -1,4 +1,3 @@
-
 package com.odontoconnect.user.dto;
 
 import jakarta.validation.constraints.Email;
@@ -7,10 +6,11 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
 import java.util.Set;
-import org.springframework.security.access.prepost.PreAuthorize;
 
-
-
+/**
+ * DTO utilizado para receber os dados necessários para criar um usuário.
+ * As anotações validam os campos antes de chegarem ao serviço.
+ */
 public record CreateUserRequest(
 
         @NotBlank(message = "O nome é obrigatório")

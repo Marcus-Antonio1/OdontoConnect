@@ -1,23 +1,20 @@
-
 package com.odontoconnect.user.service;
 
+import com.odontoconnect.common.exception.UserAlreadyExistsException;
+import com.odontoconnect.common.exception.UserNotFoundException;
 import com.odontoconnect.user.dto.CreateUserRequest;
+import com.odontoconnect.user.dto.UserResponse;
 import com.odontoconnect.user.entity.Role;
 import com.odontoconnect.user.entity.User;
 import com.odontoconnect.user.repository.RoleRepository;
 import com.odontoconnect.user.repository.UserRepository;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.odontoconnect.common.exception.UserAlreadyExistsException;
-
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import com.odontoconnect.user.dto.UserResponse;
-import java.util.List;
-import com.odontoconnect.common.exception.UserNotFoundException;
 
 @Service
 public class UserService {
@@ -50,27 +47,26 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+
+    /**
+     * Cria um usuário, associa seus perfis e retorna os dados públicos cadastrados.
+     */
     @Transactional
-    public User createUser(CreateUserRequest request) {
+    public UserResponse createUser(CreateUserRequest request) {
 
         String email = request.email().trim();
 
         if (userRepository.existsByEmailIgnoreCase(email)) {
-            throw new UserAlreadyExistsException(
-                    "Já existe um usuário cadastrado com esse e-mail."
-            );
+            throw new UserAlreadyExistsException("Já existe um usuário com esse e-mail");
         }
 
         Set<Role> roles = request.roles().stream()
-                .map(roleName -> roleRepository.findByName(
-                        roleName.trim().toUpperCase()
-                ).orElseThrow(() -> new IllegalArgumentException(
-                        "Perfil não encontrado: " + roleName
-                )))
+                .map(roleName -> roleRepository.findByName(roleName.trim().toUpperCase())
+                        .orElseThrow(() -> new IllegalArgumentException(
+                                "Perfil não encontrado: " + roleName)))
                 .collect(Collectors.toSet());
 
-        String passwordHash =
-                passwordEncoder.encode(request.password());
+        String passwordHash = passwordEncoder.encode(request.password());
 
         User user = new User(
                 request.name().trim(),
@@ -81,26 +77,23 @@ public class UserService {
 
         roles.forEach(user::addRole);
 
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        return toUserResponse(savedUser);
     }
+
+
     @Transactional(readOnly = true)
     public List<UserResponse> findAllUsers() {
 
+        // Busca todos os usuários e transforma cada entidade em um DTO.
+        // O resultado é uma lista contendo apenas os dados que podem ser expostos.
         return userRepository.findAll()
                 .stream()
-                .map(user -> new UserResponse(
-                        user.getId(),
-                        user.getName(),
-                        user.getEmail(),
-                        user.getRegistrationNumber(),
-                        user.isActive(),
-                        user.getRoles().stream()
-                                .map(Role::getName)
-                                .collect(Collectors.toSet()),
-                        user.getCreatedAt()
-                ))
+                .map(this::toUserResponse)
                 .toList();
     }
+
 
     /* findAll() busca todos os usuários cadastrados.
         stream() permite percorrer a lista.
