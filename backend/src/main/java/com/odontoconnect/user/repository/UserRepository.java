@@ -20,4 +20,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // Verifica se existe algum usuário associado ao perfil informado.
     // A propriedade Name é acessada por meio do relacionamento User -> Role.
     boolean existsByRoles_Name(String roleName);
+
+    Optional<User> findByRegistrationNumber(String registrationNumber);
 }

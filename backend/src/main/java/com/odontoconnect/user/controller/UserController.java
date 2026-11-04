@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import com.odontoconnect.user.dto.UpdateUserRequest;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.List;
 
@@ -94,5 +96,18 @@ public class UserController {
             @PathVariable Long id) {
 
         return ResponseEntity.ok(userService.findUserById(id));
+    }
+
+    // Atualiza os dados cadastrais de um usuário.
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Atualizar usuário")
+    public ResponseEntity<UserResponse> updateUser(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateUserRequest request) {
+
+        UserResponse response = userService.updateUser(id, request);
+
+        return ResponseEntity.ok(response);
     }
 }

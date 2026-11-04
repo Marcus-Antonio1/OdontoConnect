@@ -11,6 +11,7 @@ import com.odontoconnect.user.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.odontoconnect.user.dto.UpdateUserRequest;
 
 import java.util.List;
 import java.util.Set;
@@ -107,6 +108,53 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException(
                         "Usuário não encontrado."
                 ));
+
+        return toUserResponse(user);
+    }
+
+    @Transactional
+    public UserResponse updateUser(Long id, UpdateUserRequest request) {
+
+        // Busca o usuário que será atualizado.
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(
+                        "Usuário não encontrado com ID: " + id
+                ));
+
+        String email = request.email().trim();
+
+        // Verifica se o e-mail já pertence a outro usuário.
+        userRepository.findByEmailIgnoreCase(email)
+                .filter(existingUser -> !existingUser.getId().equals(id))
+                .ifPresent(existingUser -> {
+                    throw new UserAlreadyExistsException(
+                            "Já existe um usuário cadastrado com este e-mail."
+                    );
+                });
+
+        String registrationNumber = request.registrationNumber() == null
+                ? null
+                : request.registrationNumber().trim();
+
+        // Verifica se a matrícula já pertence a outro usuário.
+        if (registrationNumber != null && !registrationNumber.isBlank()) {
+            userRepository.findByRegistrationNumber(registrationNumber)
+                    .filter(existingUser -> !existingUser.getId().equals(id))
+                    .ifPresent(existingUser -> {
+                        throw new UserAlreadyExistsException(
+                                "Já existe um usuário cadastrado com esta matrícula."
+                        );
+                    });
+        } else {
+            registrationNumber = null;
+        }
+
+        // Atualiza os dados cadastrais da entidade.
+        user.updatePersonalData(
+                request.name().trim(),
+                email,
+                registrationNumber
+        );
 
         return toUserResponse(user);
     }

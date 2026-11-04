@@ -93,6 +93,13 @@ public class User {
         roles.remove(role);
     }
 
+    // Atualiza os dados cadastrais do usuário.
+    public void updatePersonalData(String name, String email, String registrationNumber) {
+        this.name = name;
+        this.email = email;
+        this.registrationNumber = registrationNumber;
+    }
+
     // Getters utilizados para consultar os dados da entidade.
     public Long getId() {
         return id;
