@@ -18,14 +18,19 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 
+/**
+ * Configura a segurança HTTP, autenticação JWT
+ * e autorização dos endpoints da aplicação.
+ */
 @Configuration
-@EnableMethodSecurity
+@EnableMethodSecurity // Habilita o controle de acesso por anotações como @PreAuthorize.
 public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    // Injeta os componentes necessários para autenticar usuários e validar tokens.
     public SecurityConfig(
             CustomUserDetailsService userDetailsService,
             PasswordEncoder passwordEncoder,
@@ -36,6 +41,7 @@ public class SecurityConfig {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
+    // Configura a autenticação utilizando os dados dos usuários armazenados no banco.
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
 
@@ -47,6 +53,7 @@ public class SecurityConfig {
         return provider;
     }
 
+    // Disponibiliza o gerenciador responsável por coordenar o processo de autenticação.
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration configuration) throws Exception {

@@ -11,6 +11,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Responsável por criar o primeiro administrador da aplicação,
+ * caso o bootstrap esteja habilitado e ainda não exista um ADMIN.
+ */
 @Component
 public class AdminBootstrapService implements CommandLineRunner {
 
@@ -39,14 +43,17 @@ public class AdminBootstrapService implements CommandLineRunner {
         this.passwordEncoder = passwordEncoder;
     }
 
+    // Executa a criação inicial do administrador durante a inicialização da aplicação.
     @Override
     @Transactional
     public void run(String... args) {
 
+        // Verifica se o bootstrap está habilitado nas configurações.
         if (!enabled) {
             return;
         }
 
+        // Evita criar outro administrador caso já exista um ADMIN.
         boolean adminExists = userRepository.existsByRoles_Name("ADMIN");
 
         if (adminExists) {
@@ -72,11 +79,13 @@ public class AdminBootstrapService implements CommandLineRunner {
             );
         }
 
+        // Busca o perfil ADMIN que será associado ao novo usuário.
         Role adminRole = roleRepository.findByName("ADMIN")
                 .orElseThrow(() -> new IllegalStateException(
                         "Perfil ADMIN não encontrado."
                 ));
 
+        // Cria o administrador armazenando a senha em formato BCrypt.
         User admin = new User(
                 name,
                 email,
