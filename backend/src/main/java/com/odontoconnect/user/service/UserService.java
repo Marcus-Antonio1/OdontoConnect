@@ -12,8 +12,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.odontoconnect.user.dto.UpdateUserRequest;
+import com.odontoconnect.user.dto.UpdateUserRolesRequest;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -183,6 +186,31 @@ public class UserService {
                 ));
 
         user.activate();
+
+        return toUserResponse(user);
+    }
+
+    // Substitui os perfis de acesso de um usuário.
+    @Transactional
+    public UserResponse updateUserRoles(Long id, UpdateUserRolesRequest request) {
+
+        // Busca o usuário que terá seus perfis alterados.
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(
+                        "Usuário não encontrado com ID: " + id
+                ));
+
+        // Busca os perfis informados e verifica se todos existem.
+        Set<Role> newRoles = request.roles().stream()
+                .map(roleName -> roleRepository.findByName(
+                        roleName.trim().toUpperCase()
+                ).orElseThrow(() -> new IllegalArgumentException(
+                        "Perfil não encontrado: " + roleName
+                )))
+                .collect(Collectors.toSet());
+
+        // Substitui os perfis atuais pelos novos.
+        user.updateRoles(newRoles);
 
         return toUserResponse(user);
     }

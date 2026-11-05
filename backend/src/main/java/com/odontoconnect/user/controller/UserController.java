@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import com.odontoconnect.user.dto.UpdateUserRequest;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import com.odontoconnect.user.dto.UpdateUserRolesRequest;
 
 import java.util.List;
 
@@ -130,6 +131,19 @@ public class UserController {
     public ResponseEntity<UserResponse> activateUser(@PathVariable Long id) {
 
         UserResponse response = userService.activateUser(id);
+
+        return ResponseEntity.ok(response);
+    }
+
+    // Atualiza os perfis de acesso de um usuário.
+    @PutMapping("/{id}/roles")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Atualizar perfis de acesso do usuário")
+    public ResponseEntity<UserResponse> updateUserRoles(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateUserRolesRequest request) {
+
+        UserResponse response = userService.updateUserRoles(id, request);
 
         return ResponseEntity.ok(response);
     }

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Collection;
 
 // Indica que esta classe é uma entidade gerenciada pelo JPA.
 @Entity
@@ -91,6 +92,12 @@ public class User {
     // Remove um perfil de acesso do usuário.
     public void removeRole(Role role) {
         roles.remove(role);
+    }
+
+    // Substitui todos os perfis de acesso atuais pelos novos perfis.
+    public void updateRoles(Collection<Role> newRoles) {
+        this.roles.clear();
+        this.roles.addAll(newRoles);
     }
 
     // Atualiza os dados cadastrais do usuário.
