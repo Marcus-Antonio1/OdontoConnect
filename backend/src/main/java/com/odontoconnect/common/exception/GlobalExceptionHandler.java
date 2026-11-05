@@ -1,5 +1,6 @@
 package com.odontoconnect.common.exception;
 
+import com.odontoconnect.conversation.exception.ConversationNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -87,5 +88,12 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.status(status).body(error);
+    }
+
+    @ExceptionHandler(ConversationNotFoundException.class)
+    public ResponseEntity<ApiError> handleConversationNotFound(
+            ConversationNotFoundException exception) {
+
+        return buildResponse(HttpStatus.NOT_FOUND, exception.getMessage());
     }
 }
