@@ -15,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.odontoconnect.user.dto.UpdateUserRequest;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 
 import java.util.List;
 
@@ -107,6 +108,28 @@ public class UserController {
             @Valid @RequestBody UpdateUserRequest request) {
 
         UserResponse response = userService.updateUser(id, request);
+
+        return ResponseEntity.ok(response);
+    }
+
+    // Desativa a conta de um usuário.
+    @PatchMapping("/{id}/deactivate")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Desativar usuário")
+    public ResponseEntity<UserResponse> deactivateUser(@PathVariable Long id) {
+
+        UserResponse response = userService.deactivateUser(id);
+
+        return ResponseEntity.ok(response);
+    }
+
+    // Reativa a conta de um usuário.
+    @PatchMapping("/{id}/activate")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Reativar usuário")
+    public ResponseEntity<UserResponse> activateUser(@PathVariable Long id) {
+
+        UserResponse response = userService.activateUser(id);
 
         return ResponseEntity.ok(response);
     }

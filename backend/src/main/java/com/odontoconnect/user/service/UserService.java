@@ -158,4 +158,32 @@ public class UserService {
 
         return toUserResponse(user);
     }
+
+    // Desativa a conta de um usuário.
+    @Transactional
+    public UserResponse deactivateUser(Long id) {
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(
+                        "Usuário não encontrado com ID: " + id
+                ));
+
+        user.deactivate();
+
+        return toUserResponse(user);
+    }
+
+    // Reativa a conta de um usuário.
+    @Transactional
+    public UserResponse activateUser(Long id) {
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(
+                        "Usuário não encontrado com ID: " + id
+                ));
+
+        user.activate();
+
+        return toUserResponse(user);
+    }
 }

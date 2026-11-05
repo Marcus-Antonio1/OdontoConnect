@@ -100,6 +100,16 @@ public class User {
         this.registrationNumber = registrationNumber;
     }
 
+    // Desativa a conta do usuário, impedindo novos acessos ao sistema.
+    public void deactivate() {
+        this.active = false;
+    }
+
+    // Reativa a conta do usuário, permitindo novos acessos ao sistema.
+    public void activate() {
+        this.active = true;
+    }
+
     // Getters utilizados para consultar os dados da entidade.
     public Long getId() {
         return id;
