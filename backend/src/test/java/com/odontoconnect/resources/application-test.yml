@@ -1,0 +1,16 @@
+jwt:
+  secret: "b2RudG9jb25uZWN0LXRlc3Qtand0LXNlY3JldC1rZXktMjAyNg=="
+  expiration: 3600000
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/odontoconnect
+    username: postgres
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+  flyway:
+    enabled: true
