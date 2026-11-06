@@ -1,4 +1,4 @@
-package com.odontoconnect.auth.controller;
+package com.odontoconnect.auth;
 
 import com.odontoconnect.auth.dto.LoginRequest;
 import com.odontoconnect.auth.dto.LoginResponse;
